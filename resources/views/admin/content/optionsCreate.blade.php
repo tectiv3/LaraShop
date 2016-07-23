@@ -1,17 +1,12 @@
-@include("admin.layout.header")
-<title>Панель приборов</title>
-</head>
-<body class="hold-transition sidebar-mini skin-red-light">
-<div class="wrapper">
-    @include("admin.layout.topmenu")
-    @include("admin.layout.navbar")
-    <!-- Content Wrapper. Contains page content -->
+@extends('admin.layout.app')
+
+@section('title')Создание опции@endsection
+
+@section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-            Создание опции
-            </h1>
+            <h1>Создание опции</h1>
             <ol class="breadcrumb">
                 <li><a href="{{URL::to('/')}}">{{Setting::get('config.sitename')}}</a></li>
                 <li>Опции товаров</li>
@@ -45,22 +40,15 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-sm-8">
-                                    {!! HTML::decode(Form::button('Создать', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
+                                    {!! Html::decode(Form::button('Создать', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
                                 </div>
                             </div>
-                            {!! Form::close(); !!}
+                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-
-                </div>
+                <div class="col-md-3"></div>
             </div>
-
         </section>
-        <!-- /.content -->
     </div>
-    @include("admin.layout.footer")
-    <!-- page script -->
-</body>
-</html>
+@endsection

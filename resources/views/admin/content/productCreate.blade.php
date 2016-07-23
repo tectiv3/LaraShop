@@ -1,13 +1,9 @@
-@include("admin.layout.header")
-<!-- iCheck -->
-{!! Html::style('plugins/iCheck/square/blue.css'); !!}
-<title>Панель приборов</title>
-</head>
-<body class="hold-transition sidebar-mini skin-red-light">
-<div class="wrapper">
-    @include("admin.layout.topmenu")
-    @include("admin.layout.navbar")
-    <!-- Content Wrapper. Contains page content -->
+@extends('admin.layout.app')
+
+@section('title')Создание продукта@endsection
+
+@section('content')
+    {!! Html::style('plugins/iCheck/square/blue.css') !!}
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -142,10 +138,10 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-sm-8">
-                                    {!! HTML::decode(Form::button('Создать', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
+                                    {!! Html::decode(Form::button('Создать', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
                                 </div>
                             </div>
-                            {!! Form::close(); !!}
+                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>
@@ -153,23 +149,21 @@
 
                 </div>
             </div>
-
         </section>
-        <!-- /.content -->
     </div>
-    @include("admin.layout.footer")
-    <!-- iCheck -->
+@endsection
+
+@push('scripts')
     {!! Html::script('plugins/iCheck/icheck.min.js'); !!}
-    <!-- page script -->
+
     <script type="text/javascript">
-                $('input').iCheck({
-        checkboxClass: 'icheckbox_square-blue',
-        radioClass: 'iradio_square-blue',
-        increaseArea: '20%' // optional
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
         });
         $(".select2").select2({
             maximumSelectionSize: 4
         });
     </script>
-</body>
-</html>
+@endpush

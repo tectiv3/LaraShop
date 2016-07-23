@@ -16,7 +16,8 @@
         "weboap/visitor": "dev-master",
         "mews/captcha": "^2.1",
         "serj1chen/nova-poshta-sdk-php": "^2.0",
-        "watson/sitemap": "2.0.*"
+        "watson/sitemap": "2.0.*",
+        "lavary/laravel-menu": "^1.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

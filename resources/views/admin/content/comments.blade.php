@@ -1,17 +1,12 @@
-@include("admin.layout.header")
-<title>Панель приборов</title>
-</head>
-<body class="hold-transition sidebar-mini skin-red-light">
-<div class="wrapper">
-    @include("admin.layout.topmenu")
-    @include("admin.layout.navbar")
-    <!-- Content Wrapper. Contains page content -->
+@extends('admin.layout.app')
+
+@section('title')Модерирование комментариев@endsection
+
+@section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-            Модерирование комментариев
-            </h1>
+            <h1>Модерирование комментариев</h1>
             <ol class="breadcrumb">
                 <li><a href="{{URL::to('/')}}">{{Setting::get('config.sitename')}}</a></li>
                 <li class="active">Комментарии продуктов</li>
@@ -27,16 +22,16 @@
                         <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
                         @endif
                         @endforeach
-                        </div> <!-- end .flash-message -->
-                        <div class="box">
-                            <div class="box-header">
-                                <h3 class="box-title">Комментарии</h3>
-                            </div>
-                            <div class="box-body">
+                    </div> <!-- end .flash-message -->
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Комментарии</h3>
+                        </div>
+                        <div class="box-body">
 
-                                <table class="table">
-                                    <tbody>
-                                        @foreach ($comments as $comment)
+                            <table class="table">
+                                <tbody>
+                                    @foreach ($comments as $comment)
                                         @if( ! empty($comment->product->id))
 
                                         <tr class="
@@ -48,7 +43,6 @@
                                                 </a>
                                             </td>
                                             <td>
-
                                                 <strong>{{$comment->name}} / {{$comment->email}}</strong> - {{ LocalizedCarbon::instance($comment->created_at)->diffForHumans() }}
                                                 <p>{{$comment->msg}}</p>
                                             </td>
@@ -56,30 +50,27 @@
                                             <td>
                                                 <div class="btn-group ">
                                                     {!! Form::open(array('action' => ['ContentController@updateCommentsApprove', $comment->id], 'method'=> 'PATCH', 'class'=>'')) !!}
-                                                    {!! HTML::decode(Form::button('Добавить', array('type' => 'submit', 'class'=>'btn btn-xs btn-flat btn-block btn-success'))) !!}
-                                                    {!! Form::close(); !!}
+                                                    {!! Html::decode(Form::button('Добавить', array('type' => 'submit', 'class'=>'btn btn-xs btn-flat btn-block btn-success'))) !!}
+                                                    {!! Form::close() !!}
                                                     {!! Form::open(array('action' => ['ContentController@destroyComments', $comment->id], 'method'=> 'DELETE', 'class'=>'')) !!}
-                                                    {!! HTML::decode(Form::button('Удалить', array('type' => 'submit', 'class'=>'btn btn-xs btn-flat btn-block btn-danger'))) !!}
-                                                    {!! Form::close(); !!}
+                                                    {!! Html::decode(Form::button('Удалить', array('type' => 'submit', 'class'=>'btn btn-xs btn-flat btn-block btn-danger'))) !!}
+                                                    {!! Form::close() !!}
                                                 </div>
                                             </td>
                                         </tr>
                                         @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="col-md-3">
-
-                    </div>
                 </div>
+                <div class="col-md-3">
 
-            </section>
-            <!-- /.content -->
-        </div>
-        @include("admin.layout.footer")
-        <!-- page script -->
-    </body>
-</html>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+@endsection

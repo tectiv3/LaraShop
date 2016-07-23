@@ -33,10 +33,8 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        
-        //
-        
+    public function index()
+    {
         $clients = Clients::all();
         $purchase = Purchase::all();
         $products = Products::all();
@@ -209,9 +207,12 @@ class DashboardController extends Controller
         
         return view('admin.dashboard')->with($data);
     }
-    
-    public function showStat() {
-        
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showStat()
+    {
         //$sessions = Tracker::sessions(5 * 60 * 24)->all();
         
         $d1 = Visitor::range(Carbon::now()->format('Y-m-d') , Carbon::now()->format('Y-m-d'));
@@ -237,10 +238,9 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        
+    public function create()
+    {
         //
-        
     }
     
     /**
@@ -249,10 +249,9 @@ class DashboardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        
+    public function store(Request $request)
+    {
         //
-        
     }
     
     /**
@@ -261,51 +260,52 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        
+    public function show($id)
+    {
         //
-        
     }
-    
-    //DashboardController
-    public function editPersonal() {
-        
-        //
-        
+
+    /**
+     * @return $this
+     */
+    public function editPersonal()
+    {
         $user = Auth::user();
         
         $data = ['user' => $user, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         return view('admin.personal')->with($data);
     }
-    
 
-//updatePersonalMail
-public function updatePersonalMail(Request $request) {
+
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function updatePersonalMail(Request $request)
+    {
         $user = User::findOrFail(Auth::user()->id);
 
-                $validator = Validator::make($request->all(), 
-
-                    ['email' => 'required|email']);
+        $validator = Validator::make($request->all(), ['email' => 'required|email']);
         
         if ($validator->fails()) {
 
             return back()->withErrors($validator);
-        }
-        else {
+        } else {
 
             $user->email = $request->email;
             $user->save();
 
             $request->session()->flash('alert-success', 'Конфигурация успешно обновлена!');
             return back();
-
         }
     }
 
-
-
-
-    public function updatePersonal(Request $request) {
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function updatePersonal(Request $request)
+    {
         $user = User::findOrFail(Auth::user()->id);
         
         //dd($request->password);

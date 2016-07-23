@@ -38,8 +38,8 @@ class PurchaseController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function npSync() {
-        
+    public function npSync()
+    {
         Config::setApiKey(Setting::get('integration.np'));
         
         $unitArr = Address::getWarehouses();
@@ -56,11 +56,12 @@ class PurchaseController extends Controller
             NPUnit::create(['name' => $value->DescriptionRu, 'ref' => $value->CityRef]);
         }
     }
-    
-    public function index() {
-        
-        //
-        
+
+    /**
+     * @return $this
+     */
+    public function index()
+    {
         //Config::setClassLogger(new Logger_example());
         
         $cart = Cart::content();
@@ -94,23 +95,22 @@ class PurchaseController extends Controller
         
         return view('purchase')->with($data);
     }
-    
-    //npGetUnit
-    public function npGetUnit($id) {
-        
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function npGetUnit($id)
+    {
         $npunit = NPUnit::where('ref', $id)->get();
         
         //dd($res);
         
         $np_unit = [];
         foreach ($npunit as $value) {
-            
-            // code...
             array_push($np_unit, ['id' => $value->name, 'text' => $value->name]);
             
             //$np_unit[$value->ref]=$value->name;
-            
-            
         }
         
         /*$arr=[
@@ -127,11 +127,9 @@ class PurchaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        
+    public function create()
+    {
         //
-        
-        
     }
     
     /**
@@ -140,10 +138,8 @@ class PurchaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        
-        //
-        
+    public function store(Request $request)
+    {
         if (Cart::count() == 0) {
             $request->session()->flash('alert-danger', 'У Вас пустая корзина. Что бы оформить заказ, наполните её.');
             return back()->withInput();
@@ -169,8 +165,7 @@ class PurchaseController extends Controller
             //dd($validator);
             
             return back()->withErrors($validator)->withInput();
-        } 
-        else {
+        } else {
             
             $client = new Clients;
             $client->name = $request->name;
@@ -285,8 +280,7 @@ class PurchaseController extends Controller
                     $totalSumm = $totalSumm + (Setting::get('product.gift') * $value->qty);
                 } 
                 else {
-
-//!strpos($a, 'are')
+                    //!strpos($a, 'are')
                     if (strpos($value->product_id, '0000') ) {
                         //dd('consist');
                         $pID=explode('0000', $value->product_id);
@@ -302,9 +296,6 @@ class PurchaseController extends Controller
                         $value->productPrice = $value->product->price;
                         $value->productName = $value->product->name;
                     }
-                    
-                    
-
 
                     //echo   $value->qty."__";
                     $totalSumm = $totalSumm + ($productPrice * $value->qty);
@@ -377,10 +368,13 @@ class PurchaseController extends Controller
             return view('orderConfirm')->with($data);
         }
     }
-    
-    //showLiqpay
-    public function showLiqpay(Request $request) {
-        
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function showLiqpay(Request $request)
+    {
         $incoming_signature = $request->signature;
         $incoming_xml = base64_decode($request->operation_xml);
         $liqpay_signature = Setting::get('money.liqpayKey');
@@ -422,10 +416,13 @@ class PurchaseController extends Controller
         }
         return redirect('/');
     }
-    
-    //showPrivat24
-    public function showPrivat24(Request $request) {
-        
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function showPrivat24(Request $request)
+    {
         $payment = $request->payment;
         $signature = $request->signature;
         
@@ -452,11 +449,14 @@ class PurchaseController extends Controller
         
         return redirect('/');
     }
-    
-    //showMail
-    public function showMail() {
-        
-/*        $data = [];
+
+    /**
+     * @return string
+     */
+    public function showMail()
+    {
+        /*
+        $data = [];
         
         Mail::queue('mail.neworder', $data, function ($message) {
             $message->from('info@it-toys.com', 'Larashop');
@@ -464,19 +464,23 @@ class PurchaseController extends Controller
             $message->to('info@zenlix.com');
         });
         */
-Visitor::log();
+        Visitor::log();
         return 'ok';
     }
-    
-    public function settingSet() {
-        
+
+    public function settingSet()
+    {
         Setting::set('product.np', '50');
         Setting::set('product.fast', '50');
         Setting::set('product.gift', '50');
         Setting::save();
     }
-    
-    public function settingGet() {
+
+    /**
+     * @return mixed
+     */
+    public function settingGet()
+    {
         return Setting::get('foo', 'default value');
     }
     
@@ -486,11 +490,9 @@ Visitor::log();
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        
+    public function show($id)
+    {
         //
-        
-        
     }
     
     /**
@@ -499,31 +501,29 @@ Visitor::log();
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-        
+    public function edit($id)
+    {
         //
-        
-        
     }
-    
+
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
+     * @internal param Request $request
+     * @internal param int $id
      */
-    
-    //updateDelivery
-    public function totalNavLabel() {
+    public function totalNavLabel()
+    {
         return Cart::count();
     }
-    
-    public function update(Request $request, $id) {
-        
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function update(Request $request, $id)
+    {
         //
-        
-        
     }
     
     /**
@@ -532,10 +532,8 @@ Visitor::log();
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        
+    public function destroy($id)
+    {
         //
-        
-        
     }
 }

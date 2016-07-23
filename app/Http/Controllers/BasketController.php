@@ -109,10 +109,9 @@ class BasketController extends Controller
         }
     }
     
-    public function create() {
-        
-        //
-        
+    public function create()
+    {
+
     }
     
     /**
@@ -121,14 +120,14 @@ class BasketController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        
-        //
-        
+    public function store(Request $request)
+    {
+
     }
     
     //storeProduct
-    public function storeProduct(Request $request, $id) {
+    public function storeProduct(Request $request, $id)
+    {
         
         //
         //dd($request->opt);
@@ -136,13 +135,13 @@ class BasketController extends Controller
         
 
 
-if ($request->opt != "Null") {
-    $option=Options::findOrFail($request->opt);
-    $product->name = $product->name . " (" . $option->name . ") ";
-    $product->price = $option->price;
-    $product->id = $product->id . "0000" . $option->id;
+        if ($request->opt != "Null") {
+            $option=Options::findOrFail($request->opt);
+            $product->name = $product->name . " (" . $option->name . ") ";
+            $product->price = $option->price;
+            $product->id = $product->id . "0000" . $option->id;
 
-}
+        }
 
         //Cart::add('293ad', 'Product 1', 1, 9.99, array('size' => 'large'));
         
@@ -168,10 +167,9 @@ if ($request->opt != "Null") {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        
+    public function show($id)
+    {
         //
-        
     }
     
     /**
@@ -180,10 +178,9 @@ if ($request->opt != "Null") {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-        
+    public function edit($id)
+    {
         //
-        
     }
     
     /**
@@ -193,10 +190,8 @@ if ($request->opt != "Null") {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-        
-        //
-        
+    public function update(Request $request, $id)
+    {
         Cart::update($id, $request->qty);
     }
     
@@ -206,16 +201,14 @@ if ($request->opt != "Null") {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy() {
-        
-        //
+    public function destroy()
+    {
         Cart::destroy();
     }
     
     //destroyElement
-    public function destroyElement($id) {
-        
-        //
+    public function destroyElement($id)
+    {
         Cart::remove($id);
     }
 }

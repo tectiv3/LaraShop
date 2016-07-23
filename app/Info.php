@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Info extends Model
 {
-    //
+    protected $table = 'info';
 
-       protected $table = 'info';
     protected $fillable = [ 'text'];
-
 }

@@ -25,10 +25,8 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        
-        //
-        
+    public function index()
+    {
         $orders = Purchase::all();
         
         foreach ($orders as $order) {
@@ -128,10 +126,9 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        
+    public function create()
+    {
         //
-        
     }
     
     /**
@@ -141,7 +138,8 @@ class OrdersController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function storeItem(Request $request, $id) {
+    public function storeItem(Request $request, $id)
+    {
         $order = Purchase::findOrFail($id);
         $validator = Validator::make($request->all() , ['qty' => 'required|integer']);
         
@@ -174,10 +172,9 @@ class OrdersController extends Controller
         }
     }
     
-    public function store(Request $request) {
-        
+    public function store(Request $request)
+    {
         //
-        
     }
     
     /**
@@ -186,9 +183,8 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        
-        //
+    public function show($id)
+    {
         $order = Purchase::findOrFail($id);
         
         ($order->delivery_type == 'np') ? $delivery_type = 'Склад Новая Почта' : $delivery_type = 'Курьерская доставка по адресу';
@@ -286,8 +282,8 @@ class OrdersController extends Controller
         return view('admin.order')->with($data);;
     }
     
-    public function showFile($id) {
-        
+    public function showFile($id)
+    {
         $file = OrderFiles::where('hash', '=', $id)->firstOrFail();
         
         $filePath = 'files/uploads/' . $file->hash . '.' . $file->extension;
@@ -305,10 +301,8 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-        
-        //
-        
+    public function edit($id)
+    {
         $order = Purchase::findOrFail($id);
         
         $totalCount = 0;
@@ -413,9 +407,13 @@ class OrdersController extends Controller
         'order' => $order, 'totalCount' => $totalCount, 'totalSumm' => $totalSumm, 'dNP' => $dNP, 'dADR' => $dADR, 'Prods' => $prods_arr, 'privat24' => $privat24, 'privat_terminal' => $privat_terminal, 'liqpay' => $liqpay, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         return view('admin.orderEdit')->with($data);;
     }
-    
-    //showCart
-    public function showCart($id) {
+
+    /**
+     * @param $id
+     * @return $this
+     */
+    public function showCart($id)
+    {
         $order = Purchase::findOrFail($id);
         
         $totalCount = 0;
@@ -468,9 +466,13 @@ class OrdersController extends Controller
         $data = ['order' => $order, 'totalCount' => $totalCount, 'totalSumm' => $totalSumm, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         return view('admin.cartOrder')->with($data);
     }
-    
-    //updateDelivery
-    public function updateDelivery(Request $request, $id) {
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function updateDelivery(Request $request, $id)
+    {
         $status = $request->status;
         
         $order = Purchase::findOrFail($id);
@@ -509,8 +511,8 @@ class OrdersController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function updateFast(Request $request, $id) {
-        
+    public function updateFast(Request $request, $id)
+    {
         $order = Purchase::findOrFail($id);
         
         if ($order->items()->where('product_id', 'fast')->exists()) {
@@ -528,8 +530,13 @@ class OrdersController extends Controller
             $newItem->save();
         }
     }
-    
-    public function updateGift(Request $request, $id) {
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function updateGift(Request $request, $id)
+    {
         $order = Purchase::findOrFail($id);
         
         if ($order->items()->where('product_id', 'gift')->exists()) {
@@ -548,10 +555,14 @@ class OrdersController extends Controller
             $newItem->save();
         }
     }
-    
-    public function update(Request $request, $id) {
-        
-        //
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function update(Request $request, $id)
+    {
         $order = Purchase::findOrFail($id);
         
         $validator = Validator::make($request->all() , ['name' => 'required|min:2|max:255', 'tel' => 'required|min:2', 'email' => 'required|email']);
@@ -572,17 +583,24 @@ class OrdersController extends Controller
             return redirect('orders/' . $id);
         }
     }
-    
-    //updateQty
-    public function updateQty(Request $request, $id) {
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function updateQty(Request $request, $id)
+    {
         $item = OrderItems::where('order_id', $id)->where('id', $request->el)->first();
         $item->update(['qty' => $request->qty]);
     }
-    
-    //updateStatusNew
-    public function updateStatusNew(Request $request, $id) {
-        
-        //
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateStatusNew(Request $request, $id)
+    {
         $order = Purchase::findOrFail($id);
         $order->status = 'new';
         $order->save();
@@ -600,9 +618,14 @@ class OrdersController extends Controller
         $request->session()->flash('alert-success', 'Статус изменён!');
         return back();
     }
-    public function updateStatusPaid(Request $request, $id) {
-        
-        //
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateStatusPaid(Request $request, $id)
+    {
         $order = Purchase::findOrFail($id);
         $order->status = 'paid';
         $order->save();
@@ -618,9 +641,14 @@ class OrdersController extends Controller
         $request->session()->flash('alert-success', 'Статус изменён!');
         return back();
     }
-    public function updateStatusSent(Request $request, $id) {
-        
-        //
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateStatusSent(Request $request, $id)
+    {
         $order = Purchase::findOrFail($id);
         $order->status = 'sent';
         $order->save();
@@ -638,9 +666,13 @@ class OrdersController extends Controller
         $request->session()->flash('alert-success', 'Статус изменён!');
         return back();
     }
-    public function updateTtn(Request $request, $id) {
-        
-        //
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function updateTtn(Request $request, $id)
+    {
         $order = Purchase::findOrFail($id);
         $order->ttn = $request->ttn;
         $order->save();
@@ -652,8 +684,8 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
-    public function showPrint($id) {
+    public function showPrint($id)
+    {
         $order = Purchase::findOrFail($id);
         
         ($order->delivery_np == 'np') ? $delivery_type = 'Склад Новая Почта' : $delivery_type = 'Курьерская доставка по адресу';
@@ -747,20 +779,26 @@ class OrdersController extends Controller
         }
         
         $data = ['order' => $order, 'delivery_type' => $delivery_type, 'pay_type' => $pay_type, 'pay_status' => $pay_status, 'totalCount' => $totalCount, 'totalSumm' => $totalSumm];
-        return view('admin.orderPrint')->with($data);;
+        return view('admin.orderPrint')->with($data);
     }
-    public function destroyElement(Request $request, $id) {
-        
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function destroyElement(Request $request, $id)
+    {
         //dd($request->el);
-        
+
         $item = OrderItems::where('order_id', $id)->where('id', $request->el)->first();
         $item->delete();
     }
-    
-    //destroyElement
-    public function destroy($id) {
-        
-        //
+
+    /**
+     * @param $id
+     */
+    public function destroy($id)
+    {
         $order = Purchase::findOrFail($id);
         $order->delete();
     }

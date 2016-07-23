@@ -1,11 +1,10 @@
-@include("admin.layout.header")
-{!! Html::style('plugins/fancybox/jquery.fancybox.css'); !!}
-<title>Панель приборов</title>
-</head>
-<body class="hold-transition sidebar-mini skin-red-light">
-<div class="wrapper">
-    @include("admin.layout.topmenu")
-    @include("admin.layout.navbar")
+@extends('admin.layout.app')
+
+@section('title')Заказ@endsection
+
+@section('content')
+    {!! Html::style('plugins/fancybox/jquery.fancybox.css') !!}
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -319,59 +318,60 @@
             </section>
             <!-- /.content -->
         </div>
-        @include("admin.layout.footer")
-        {!! Html::script('plugins/fancybox/jquery.fancybox.pack.js'); !!}
-        <!-- page script -->
-        <script type="text/javascript">
-                $('.fancybox').fancybox({
-            "type": "image"
-            });
-            $('body').on('click', '.remove', function(event) {
-            event.preventDefault();
-            var id=$(this).attr('data-id');
+@endsection
+
+@push('scripts')
+{!! Html::script('plugins/fancybox/jquery.fancybox.pack.js'); !!}
+<!-- page script -->
+<script type="text/javascript">
+    $('.fancybox').fancybox({
+        "type": "image"
+    });
+    $('body').on('click', '.remove', function(event) {
+        event.preventDefault();
+        var id=$(this).attr('data-id');
         bootbox.confirm("Действительно хотите удалить заказ?", function(result) {
-        if (result == true) {
-            var data={ _token : CSRF_TOKEN, _method: 'DELETE', id : id };
-            //console.log(id);
-        $.ajax({
-                                            type: 'POST',
-                                            url: SYS_URL+'/orders/'+id,
-                                            data: data,
-                                            //dataType: 'html',
-                                            success: function(html) {
-                                                window.location = SYS_URL+'/orders'
-                                            }
-                                        });
-        }
+            if (result == true) {
+                var data={ _token : CSRF_TOKEN, _method: 'DELETE', id : id };
+                //console.log(id);
+                $.ajax({
+                    type: 'POST',
+                    url: SYS_URL+'/orders/'+id,
+                    data: data,
+                    //dataType: 'html',
+                    success: function(html) {
+                        window.location = SYS_URL+'/orders'
+                    }
+                });
+            }
             else {
             }
         });
-        });
-            $('body').on('click', '.enter_ttn', function(event) {
-            event.preventDefault();
-            var id=$(this).attr('data-id');
+    });
+    $('body').on('click', '.enter_ttn', function(event) {
+        event.preventDefault();
+        var id=$(this).attr('data-id');
         bootbox.prompt({
-        title: "Введите номер ТТН",
-        value: "{{$order->ttn}}",
-        callback: function(result) {
-            if (result === null) {
-            
-            } else {
-                var data={ _token : CSRF_TOKEN, _method: 'PATCH', ttn : result };
-        $.ajax({
-                                            type: 'POST',
-                                            url: SYS_URL+'/orders/'+id+'/ttn',
-                                            data: data,
-                                            //dataType: 'html',
-                                            success: function(html) {
-                                                window.location = SYS_URL+'/orders/'+id;
-                                            }
-                                        });
-            // Example.show("Hi <b>"+result+"</b>");
+            title: "Введите номер ТТН",
+            value: "{{$order->ttn}}",
+            callback: function(result) {
+                if (result === null) {
+
+                } else {
+                    var data={ _token : CSRF_TOKEN, _method: 'PATCH', ttn : result };
+                    $.ajax({
+                        type: 'POST',
+                        url: SYS_URL+'/orders/'+id+'/ttn',
+                        data: data,
+                        //dataType: 'html',
+                        success: function(html) {
+                            window.location = SYS_URL+'/orders/'+id;
+                        }
+                    });
+                    // Example.show("Hi <b>"+result+"</b>");
+                }
             }
-        }
         });
-        });
-        </script>
-    </body>
-</html>
+    });
+</script>
+@endpush

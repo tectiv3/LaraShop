@@ -1,11 +1,8 @@
-@include("admin.layout.header")
-<title>Панель приборов</title>
-</head>
-<body class="hold-transition sidebar-mini skin-red-light">
-<div class="wrapper">
-    @include("admin.layout.topmenu")
-    @include("admin.layout.navbar")
-    <!-- Content Wrapper. Contains page content -->
+@extends('admin.layout.app')
+
+@section('title')Основные настройки@endsection
+
+@section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -189,10 +186,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-3 col-sm-8">
-                                        {!! HTML::decode(Form::button('Сохранить', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
+                                        {!! Html::decode(Form::button('Сохранить', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
                                     </div>
                                 </div>
-                                {!! Form::close(); !!}
+                                {!! Form::close() !!}
                             </div>
                         </div>
                     </div>
@@ -204,7 +201,4 @@
             </section>
             <!-- /.content -->
         </div>
-        @include("admin.layout.footer")
-        <!-- page script -->
-    </body>
-</html>
+@endsection

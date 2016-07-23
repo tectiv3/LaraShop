@@ -2,7 +2,7 @@
     <!-- Logo -->
     <a href="{!! URL::to('/') !!}" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini">{!! $FirmNameShort or "IT" !!}</span>
+    <span class="logo-mini">{!! $FirmNameShort or substr($DashBoardSiteName, 0, 3) !!}</span>
     <!-- logo for regular state and mobile devices -->
     <span class="logo-lg">{!! $DashBoardSiteName !!}</span>
     </a>

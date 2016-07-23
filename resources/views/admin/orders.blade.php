@@ -1,14 +1,12 @@
-@include("admin.layout.header")
-<title>Панель приборов</title>
-</head>
-<body class="hold-transition sidebar-mini skin-red-light">
-<div class="wrapper">
-    @include("admin.layout.topmenu")
-    @include("admin.layout.navbar")
+@extends('admin.layout.app')
+
+@section('title')Список заказов@endsection
+
+@section('content')
     <style type="text/css">
-    form.btn-group + form.btn-group {
-        margin-left: -5px;
-    }
+        form.btn-group + form.btn-group {
+            margin-left: -5px;
+        }
     </style>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -130,70 +128,71 @@
             </section>
             <!-- /.content -->
         </div>
-        @include("admin.layout.footer")
-        <!-- page script -->
-        <script>
-        $(function () {
-            $('body').on('click', '.remove', function(event) {
+@endsection
+
+
+@push('scripts')
+<script>
+    $(function () {
+        $('body').on('click', '.remove', function(event) {
             event.preventDefault();
             var id=$(this).attr('data-id');
-        bootbox.confirm("Действительно хотите удалить заказ?", function(result) {
-        if (result == true) {
-            var data={ _token : CSRF_TOKEN, _method: 'DELETE', id : id };
-            //console.log(id);
-        $.ajax({
-                                            type: 'POST',
-                                            url: SYS_URL+'/orders/'+id,
-                                            data: data,
-                                            //dataType: 'html',
-                                            success: function(html) {
-                                                window.location = SYS_URL+'/orders'
-                                            }
-                                        });
-        }
-            else {
-            }
+            bootbox.confirm("Действительно хотите удалить заказ?", function(result) {
+                if (result == true) {
+                    var data={ _token : CSRF_TOKEN, _method: 'DELETE', id : id };
+                    //console.log(id);
+                    $.ajax({
+                        type: 'POST',
+                        url: SYS_URL+'/orders/'+id,
+                        data: data,
+                        //dataType: 'html',
+                        success: function(html) {
+                            window.location = SYS_URL+'/orders'
+                        }
+                    });
+                }
+                else {
+                }
+            });
         });
-        });
-            $("#example1").DataTable(
-        {
-        "processing": true,
-        "order": [[ 1, "desc" ]],
-                "columnDefs": [ {
-                "targets": 'no-sort',
-                "orderable": false,
-            } ],
-            "language": {
+        $("#example1").DataTable(
+                {
+                    "processing": true,
+                    "order": [[ 1, "desc" ]],
+                    "columnDefs": [ {
+                        "targets": 'no-sort',
+                        "orderable": false,
+                    } ],
+                    "language": {
                         "url": "{!! asset('plugins/datatables/lang/Russian.json'); !!}",
                     }
-            });
-            
-            $('body').on('click', '.enter_ttn', function(event) {
+                });
+
+        $('body').on('click', '.enter_ttn', function(event) {
             event.preventDefault();
             var id=$(this).attr('data-id');
-        bootbox.prompt({
-        title: "Введите номер ТТН",
-        value: "",
-        callback: function(result) {
-            if (result === null) {
-            
-            } else {
-                var data={ _token : CSRF_TOKEN, _method: 'PATCH', ttn : result };
-        $.ajax({
-                                            type: 'POST',
-                                            url: SYS_URL+'/orders/'+id+'/ttn',
-                                            data: data,
-                                            //dataType: 'html',
-                                            success: function(html) {
-                                                window.location = SYS_URL+'/orders/'+id;
-                                            }
-                                        });
-            // Example.show("Hi <b>"+result+"</b>");
-            }
-        }
+            bootbox.prompt({
+                title: "Введите номер ТТН",
+                value: "",
+                callback: function(result) {
+                    if (result === null) {
+
+                    } else {
+                        var data={ _token : CSRF_TOKEN, _method: 'PATCH', ttn : result };
+                        $.ajax({
+                            type: 'POST',
+                            url: SYS_URL+'/orders/'+id+'/ttn',
+                            data: data,
+                            //dataType: 'html',
+                            success: function(html) {
+                                window.location = SYS_URL+'/orders/'+id;
+                            }
+                        });
+                        // Example.show("Hi <b>"+result+"</b>");
+                    }
+                }
+            });
         });
-        });
-        });
-        </script>
-    </body>
-</html>
+    });
+</script>
+@endpush

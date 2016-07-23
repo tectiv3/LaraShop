@@ -11,9 +11,11 @@ class Comments extends Model
     protected $fillable = [ 'name','email','msg','product_id','approve' ];
 
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function product()
-  {
-    return $this->belongsTo('larashop\Products', 'product_id');
-  }
-
+    {
+        return $this->belongsTo('larashop\Products', 'product_id');
+    }
 }

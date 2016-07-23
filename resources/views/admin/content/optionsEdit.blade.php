@@ -1,17 +1,12 @@
-@include("admin.layout.header")
-<title>Панель приборов</title>
-</head>
-<body class="hold-transition sidebar-mini skin-red-light">
-<div class="wrapper">
-    @include("admin.layout.topmenu")
-    @include("admin.layout.navbar")
-    <!-- Content Wrapper. Contains page content -->
+@extends('admin.layout.app')
+
+@section('title')Редактирование опции@endsection
+
+@section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-            Редактирование опции
-            </h1>
+            <h1>Редактирование опции</h1>
             <ol class="breadcrumb">
                 <li><a href="{{URL::to('/')}}">{{Setting::get('config.sitename')}}</a></li>
                 <li>Опции товаров</li>
@@ -27,7 +22,6 @@
                             <h3 class="box-title">Информация об опции</h3>
                         </div>
                         <div class="box-body">
-
                             {!! Form::model($option, array('action' => array('ContentController@updateOptions', $option->id), 'method'=> 'POST', 'class'=>'form-horizontal')) !!}
                             <div class="form-group @if ($errors->has('name')) has-error @endif">
                                 {!! Form::label('name', 'Название', array('class'=>'col-sm-3 control-label')) !!}
@@ -45,10 +39,10 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-sm-8">
-                                    {!! HTML::decode(Form::button('Сохранить', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
+                                    {!! Html::decode(Form::button('Сохранить', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
                                 </div>
                             </div>
-                            {!! Form::close(); !!}
+                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>
@@ -56,11 +50,7 @@
 
                 </div>
             </div>
-
         </section>
         <!-- /.content -->
     </div>
-    @include("admin.layout.footer")
-    <!-- page script -->
-</body>
-</html>
+@endsection

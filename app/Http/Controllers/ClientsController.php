@@ -18,9 +18,8 @@ class ClientsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        
-        //
+    public function index()
+    {
         $clients = Clients::all();
         
         $data = ['clients' => $clients, 'NewOrderCounter' => Purchase::Neworders()->count() ];
@@ -32,10 +31,9 @@ class ClientsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        
+    public function create()
+    {
         //
-        
     }
     
     /**
@@ -44,10 +42,9 @@ class ClientsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        
+    public function store(Request $request)
+    {
         //
-        
     }
     
     /**
@@ -56,10 +53,9 @@ class ClientsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        
+    public function show($id)
+    {
         //
-        
     }
     
     /**
@@ -68,9 +64,8 @@ class ClientsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-        
-        //
+    public function edit($id)
+    {
         $client = Clients::findOrFail($id);
         $data = ['client' => $client, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         return view('admin.client')->with($data);
@@ -83,18 +78,13 @@ class ClientsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-        
-        //
-        
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all() , ['name' => 'required|min:2|max:255', 'tel' => 'required|min:2', 'email' => 'required|email']);
         
         if ($validator->fails()) {
-            
             return back()->withErrors($validator)->withInput();
-        } 
-        else {
-            
+        } else {
             $client = Clients::findOrFail($id);
             
             $client->update(['name' => $request->name, 'tel' => $request->tel, 'email' => $request->email]);
@@ -110,9 +100,8 @@ class ClientsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        
-        //
+    public function destroy($id)
+    {
         $client = Clients::findOrFail($id);
         $client->delete();
     }

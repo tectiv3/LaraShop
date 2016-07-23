@@ -1,10 +1,8 @@
-@include("admin.layout.header")
-<title>Панель приборов</title>
-</head>
-<body class="hold-transition sidebar-mini skin-red-light">
-<div class="wrapper">
-    @include("admin.layout.topmenu")
-    @include("admin.layout.navbar")
+@extends('admin.layout.app')
+
+@section('title')Галерея@endsection
+
+@section('content')
     <style type="text/css">
     .placeholder {
         border: 1px dashed #cccccc;
@@ -17,9 +15,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-            Галерея
-            </h1>
+            <h1>Галерея</h1>
             <ol class="breadcrumb">
                 <li><a href="{{URL::to('/')}}">{{Setting::get('config.sitename')}}</a></li>
                 <li class="active">Список изображений</li>
@@ -93,10 +89,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-8">
-                                        {!! HTML::decode(Form::button('Загрузить', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
+                                        {!! Html::decode(Form::button('Загрузить', array('type' => 'submit', 'class'=>'btn btn-success'))) !!}
                                     </div>
                                 </div>
-                                {!! Form::close(); !!}
+                                {!! Form::close() !!}
                             </div>
                             <!-- /.box-body -->
                         </div>
@@ -106,58 +102,58 @@
             </section>
             <!-- /.content -->
         </div>
-        @include("admin.layout.footer")
-        <!-- page script -->
-        <script>
-        $(function () {
-            $('body').on('click', '.remove_cat', function(event) {
+@endsection
+
+@push('scripts')
+<script>
+    $(function () {
+        $('body').on('click', '.remove_cat', function(event) {
             event.preventDefault();
             var id=$(this).attr('data-id');
-        bootbox.confirm("Действительно хотите удалить файл?", function(result) {
-        if (result == true) {
-            var data={ _token : CSRF_TOKEN, _method: 'DELETE', id : id };
-            //console.log(id);
-        $.ajax({
-                                            type: 'POST',
-                                            url: SYS_URL+'/content/gallery/delete/'+id,
-                                            data: data,
-                                            //dataType: 'html',
-                                            success: function(html) {
-                                                window.location = SYS_URL+'/content/gallery'
-                                            }
-                                        });
-        }
-            else {
-            }
+            bootbox.confirm("Действительно хотите удалить файл?", function(result) {
+                if (result == true) {
+                    var data={ _token : CSRF_TOKEN, _method: 'DELETE', id : id };
+                    //console.log(id);
+                    $.ajax({
+                        type: 'POST',
+                        url: SYS_URL+'/content/gallery/delete/'+id,
+                        data: data,
+                        //dataType: 'html',
+                        success: function(html) {
+                            window.location = SYS_URL+'/content/gallery'
+                        }
+                    });
+                }
+                else {
+                }
+            });
         });
-        });
-            //jQuery UI sortable for the todo list
+        //jQuery UI sortable for the todo list
         $(".row-list").sortable({
             placeholder: "col-md-3 placeholder",
             handle: ".handle",
             items: 'div:not(.row)',
             forcePlaceholderSize: true,
             zIndex: 999999,
-        update: function (event, ui) {
-        var def_data={ _token : CSRF_TOKEN, _method: 'PATCH' };
-        var data = $(this).sortable('serialize');
-        var data_res = data + '&' + $.param(def_data);
-        console.log(data);
+            update: function (event, ui) {
+                var def_data={ _token : CSRF_TOKEN, _method: 'PATCH' };
+                var data = $(this).sortable('serialize');
+                var data_res = data + '&' + $.param(def_data);
+                console.log(data);
                 // POST to server using $.post or $.ajax
-                                        $.ajax({
-                                            type: 'POST',
-                                            url: SYS_URL+'/content/gallery/sort',
-                                            data: data_res,
-                                            //dataType: 'html',
-                                        });
-                /*$.ajax({
-                    data: data,
+                $.ajax({
                     type: 'POST',
-                    url: '/your/url/here'
-                });*/
+                    url: SYS_URL+'/content/gallery/sort',
+                    data: data_res,
+                    //dataType: 'html',
+                });
+                /*$.ajax({
+                 data: data,
+                 type: 'POST',
+                 url: '/your/url/here'
+                 });*/
             }
         });
-        });
-        </script>
-    </body>
-</html>
+    });
+</script>
+@endpush

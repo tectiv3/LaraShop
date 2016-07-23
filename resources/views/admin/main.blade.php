@@ -1,33 +1,25 @@
-@include("layout.header")
-<title>Панель приборов</title>
-</head>
+@extends('admin.layout.app')
 
-<body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+@section('title')Основная информация@endsection
 
-@include("layout.topmenu")
-@include("layout.navbar")  
-
-
-  <!-- Content Wrapper. Contains page content -->
+@section('content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-<section class="content-header">
-    <h1>
-    <i class="fa fa-tachometer"></i> Панель приборов
-    <small>Основная информация</small>
-    </h1>
-    <ol class="breadcrumb">
-                <li><a href="{{URL::to('/')}}">{{Setting::get('config.sitename')}}</a></li>
-        <li class="active">Панель приборов</li>
-    </ol>
-</section>
+    <section class="content-header">
+        <h1>
+        <i class="fa fa-tachometer"></i> Панель приборов
+        <small>Основная информация</small>
+        </h1>
+        <ol class="breadcrumb">
+                    <li><a href="{{URL::to('/')}}">{{Setting::get('config.sitename')}}</a></li>
+            <li class="active">Панель приборов</li>
+        </ol>
+    </section>
 
     <!-- Main content -->
-<section class="content">
+    <section class="content">
 
-
-<div class="row">
+        <div class="row">
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box bg-red">
                 <span class="info-box-icon"><i class="fa fa-users"></i></span>
@@ -90,17 +82,11 @@
             </div><!-- /.col -->
           </div>
 
-    
-
-
-
     <div class="row">
-
-
         <div class="col-md-6">
             <div class="box">
                 <div class="box-header"><h3 class="box-title"><i class="fa fa-exclamation-circle"></i> Важные объявления</h3></div>
-<div class="box-footer box-comments" style="background: #FFFFFF;">
+                <div class="box-footer box-comments" style="background: #FFFFFF;">
                   <div class="box-comment" >
                     <!-- User image -->
                     <img class="img-circle img-sm" src="{!! asset('dist/img/user3-128x128.jpg'); !!}" alt="user image">
@@ -133,13 +119,6 @@
             <div class="box">
                 <div class="box-header"><h3 class="box-title"><a href="helper"><i class="fa fa-globe"></i> Последнее из Центра Знаний</a></h3></div>
                 <div class="box-footer box-comments" style="background: #FFFFFF;">
-
-
-
-
-
-
-
                   <div class="box-comment">
                     <!-- User image -->
                     <img class="img-circle img-sm" src="{!! asset('dist/img/user4-128x128.jpg'); !!}" alt="user image">
@@ -179,47 +158,18 @@
                     </div><!-- /.comment-text -->
                   </div><!-- /.box-comment -->
                 </div>
-
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
 
-
     <div class="row">
-
-
         <div class="col-md-12">
             <div class="box">
-
-
-
                 <div class="box-header">
                     <h3 class="box-title"><a href="list?in"><i class="fa fa-list-alt"></i> Последние входящие заявки</a></h3>
                 </div>
-
-
-
-
-
                 <div class="box-body">
-
-
-
-
-
-<table id="example1" class="table table-bordered">
+                <table id="example1" class="table table-bordered">
                 <thead>
                 <tr>
                     <th><center><div id="sort_id">#</div></center></th>
@@ -260,65 +210,40 @@
                         <td style=" vertical-align: middle; "><small><center>
                                     <span class="label label-primary"><i class="fa fa-clock-o"></i> ожидания действия</span> </center>
                             </small></td>
-
                     </tr>
-
-  
                 </tbody>
-
               </table>
-
-
-
-                
-
-
-
             </div>
-
-
-
-
                     </div><!-- /.box-body -->
                     </div><!-- /.box -->
                 </div>
-
-
-
-
-
-            
-
-
-
         </section>
     <!-- /.content -->
   </div>
+@endsection
 
-@include("layout.footer")
-<!-- page script -->
+@push('scripts')
 <script>
-  $(function () {
-    $("#example1").DataTable({
-      "language": {
+    $(function () {
+        $("#example1").DataTable({
+            "language": {
                 "url": "plugins/datatables/lang/Russian.json",
             },
-                  "searching": false,
-                  "paging": false,
-                        "info": false,
-          });
-    $('#example2').DataTable({
-      "paging": true,
-      "language": {
+            "searching": false,
+            "paging": false,
+            "info": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "language": {
                 "url": "plugins/datatables/lang/Russian.json"
             },
 
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+        });
     });
-  });
 </script>
-</body>
-</html>
+@endpush

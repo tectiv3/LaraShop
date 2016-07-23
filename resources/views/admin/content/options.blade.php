@@ -1,11 +1,8 @@
-@include("admin.layout.header")
-<title>Панель приборов</title>
-</head>
-<body class="hold-transition sidebar-mini skin-red-light">
-<div class="wrapper">
-    @include("admin.layout.topmenu")
-    @include("admin.layout.navbar")
-    <!-- Content Wrapper. Contains page content -->
+@extends('admin.layout.app')
+
+@section('title')Список опций товаров@endsection
+
+@section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -27,23 +24,19 @@
                         <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
                         @endif
                         @endforeach
-                        </div> <!-- end .flash-message -->
-                        <div class="box">
-                            <div class="box-header">
-                                <h3 class="box-title">Список опций</h3>
-                            </div>
-                            <div class="box-body">
-                                
-
-<div class="table-responsive">
-                                            
-
-<table id="example1" class="table table-bordered table-striped">
+                    </div> <!-- end .flash-message -->
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Список опций</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th><center>Имя</center></th>
                                             <th><center>Цена</center></th>
-                                            
+
                                             <th><center>Управлять</center></th>
                                         </tr>
                                     </thead>
@@ -52,7 +45,7 @@
                                         <tr>
                                             <td>{{$option->name}}</td>
                                             <td>{{$option->price}}</td>
-                                            
+
                                             <td><center>
                                                 <div class="btn-group text-center">
                                                     <a href='{{URL::to('/content/options/edit/'.$option->id)}}' class="btn btn-warning btn-xs">редактировать</a>
@@ -63,60 +56,51 @@
                                         </tr>
                                         @endforeach
                                     </tbody>
-
                                 </table>
-
-
-                                        </div>
-
-
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-
-                        <div class="box box-solid">
-
-                            <!-- /.box-header -->
-                            <div class="box-body">
-                                <a href="{!! URL::to('content/options/add'); !!}" class="btn btn-block btn-primary btn-flat">Создать опцию</a>
-                            </div>
-                            <!-- /.box-body -->
                         </div>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="box box-solid">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <a href="{!! URL::to('content/options/add'); !!}" class="btn btn-block btn-primary btn-flat">Создать опцию</a>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+@endsection
 
-            </section>
-            <!-- /.content -->
-        </div>
-        @include("admin.layout.footer")
-        <!-- page script -->
-        <script>
+@push('scripts')
+    <script>
         $(function () {
             $('body').on('click', '.remove', function(event) {
-            event.preventDefault();
-            var id=$(this).attr('data-id');
-        bootbox.confirm("Действительно хотите удалить опцию?", function(result) {
-        if (result == true) {
-            var data={ _token : CSRF_TOKEN, _method: 'DELETE', id : id };
-            //console.log(id);
-        $.ajax({
-                                            type: 'POST',
-                                            url: SYS_URL+'/content/options/delete/'+id,
-                                            data: data,
-                                            //dataType: 'html',
-                                            success: function(html) {
-                                                window.location = SYS_URL+'/content/options'
-                                            }
-                                        });
-        }
-            else {
-            }
-        });
-        });
+                event.preventDefault();
+                var id=$(this).attr('data-id');
+                bootbox.confirm("Действительно хотите удалить опцию?", function(result) {
+                    if (result == true) {
+                        var data={ _token : CSRF_TOKEN, _method: 'DELETE', id : id };
+                        //console.log(id);
+                        $.ajax({
+                            type: 'POST',
+                            url: SYS_URL+'/content/options/delete/'+id,
+                            data: data,
+                            //dataType: 'html',
+                            success: function(html) {
+                                window.location = SYS_URL+'/content/options'
+                            }
+                        });
+                    }
+                    else {
+                    }
+                });
+            });
             //jQuery UI sortable for the todo list
-
         });
-        </script>
-    </body>
-</html>
+    </script>
+@endpush

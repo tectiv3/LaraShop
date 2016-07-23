@@ -22,144 +22,145 @@ use DB;
 
 class ContentController extends Controller
 {
-    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        
+    public function index()
+    {
         //
-        
-        
     }
-    
 
-
-
-public function indexOptions() {
-
+    /**
+     * @return $this
+     */
+    public function indexOptions()
+    {
         $options = Options::all();
-        
+
         $data = ['options' => $options,
         'NewOrderCounter' => Purchase::Neworders()->count() ];
-        
+
         return view('admin.content.options')->with($data);
+    }
+
+    /**
+     * @return $this
+     */
+    public function createOptions()
+    {
+        $data = ['NewOrderCounter' => Purchase::Neworders()->count()];
+        return view('admin.content.optionsCreate')->with($data);
+    }
 
 
-}
-
-
-public function createOptions() {
-
-    $data = [
-        'NewOrderCounter' => Purchase::Neworders()->count() ];
-return view('admin.content.optionsCreate')->with($data);
-}
-
-
-public function storeOptions(Request $request) {
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function storeOptions(Request $request)
+    {
         $validator = Validator::make($request->all() , ['name' => 'required|min:2|max:255', 'price' => 'required']);
         
         if ($validator->fails()) {
-            
             return back()->withErrors($validator)->withInput();
-        } 
-        else {
-
-
-Options::create([
-
-'name'=>$request->name,
-'price'=>$request->price
-
-    ]);
+        } else {
+            Options::create([
+                'name'=>$request->name,
+                'price'=>$request->price
+            ]);
             $request->session()->flash('alert-success', 'Опция успешно создана!');
             return redirect('content/options');
-
         }
-}
+    }
 
 
-public function editOptions($id) {
+    /**
+     * @param $id
+     * @return $this
+     */
+    public function editOptions($id)
+    {
+        $option = Options::findOrFail($id);
 
+        $data = ['option'=>$option, 'NewOrderCounter' => Purchase::Neworders()->count() ];
+        return view('admin.content.optionsEdit')->with($data);
+    }
 
-$option=Options::findOrFail($id);
-
-    $data = ['option'=>$option,
-        'NewOrderCounter' => Purchase::Neworders()->count() ];
-return view('admin.content.optionsEdit')->with($data);
-
-}
-
-
-public function updateOptions(Request $request, $id) {
-
-$option=Options::findOrFail($id);
+    /**
+     * @param Request $request
+     * @param $id
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function updateOptions(Request $request, $id)
+    {
+        $option = Options::findOrFail($id);
         $validator = Validator::make($request->all() , ['name' => 'required|min:2|max:255', 'price' => 'required']);
-        
+
         if ($validator->fails()) {
-            
             return back()->withErrors($validator)->withInput();
-        } 
-        else {
-$option->update([
-
-'name'=>$request->name,
-'price'=>$request->price
-
-    ]);
-
+        } else {
+            $option->update([
+                'name'=>$request->name,
+                'price'=>$request->price
+            ]);
             $request->session()->flash('alert-success', 'Опция успешно сохранена!');
             return redirect('content/options');
 
-}
+        }
+    }
 
+    /**
+     * @param $id
+     */
+    public function destroyOptions($id)
+    {
+        $option = Options::findOrFail($id);
+        $option->delete();
+    }
 
-}
-
-
-public function destroyOptions($id) {
-$option=Options::findOrFail($id);
-
-$option->delete();
-
-}
-
-
-
-
-
-    public function indexCat() {
-        
-        //
-        
+    /**
+     * @return $this
+     */
+    public function indexCat()
+    {
         $cats = Categories::orderBy('sort_id', 'asc')->get();
         
         $data = ['cats' => $cats, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         
         return view('admin.content.category')->with($data);
     }
-    public function createCat() {
-        
-        //
+
+    /**
+     * @return $this
+     */
+    public function createCat()
+    {
         $data = ['NewOrderCounter' => Purchase::Neworders()->count() ];
         
         return view('admin.content.categoryCreate')->with($data);
     }
-    
-    public function editCat($id) {
-        
-        //
+
+    /**
+     * @param $id
+     * @return $this
+     */
+    public function editCat($id)
+    {
         $cat = Categories::findOrFail($id);
         
         $data = ['cat' => $cat, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         return view('admin.content.categoryEdit')->with($data);
     }
-    
-    public function updateCat(Request $request, $id) {
-        
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function updateCat(Request $request, $id)
+    {
         $cat = Categories::findOrFail($id);
         
         if (isset($cat->cover)) {
@@ -176,10 +177,8 @@ $option->delete();
         $validator = Validator::make($request->all() , ['name' => 'required|min:2|max:255', 'description' => 'required|min:2|max:255', 'urlhash' => 'required|min:2|max:255', 'cover' => 'mimes:jpeg,bmp,png']);
         
         if ($validator->fails()) {
-            
             return back()->withErrors($validator)->withInput();
-        } 
-        else {
+        } else {
             $coverdb = $cat->cover;
             if (isset($cover)) {
                 $img = Image::make($cover);
@@ -205,11 +204,13 @@ $option->delete();
             return redirect('content/cat');
         }
     }
-    
-    public function storeCat(Request $request) {
-        
-        //
-        
+
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function storeCat(Request $request)
+    {
         $cover = $request->file('cover');
         
         //dd(Input::file());
@@ -222,8 +223,7 @@ $option->delete();
         if ($validator->fails()) {
             
             return back()->withErrors($validator)->withInput();
-        } 
-        else {
+        } else {
             $coverdb = Null;
             if (isset($cover)) {
                 $img = Image::make($cover);
@@ -248,12 +248,15 @@ $option->delete();
             return redirect('content/cat');
         }
     }
-    
-    public function sortCat(Request $request) {
+
+    /**
+     * @param Request $request
+     */
+    public function sortCat(Request $request)
+    {
         $i = 0;
         $tap = $request->item;
         foreach ($tap as $value) {
-            
             // Execute statement:
             // UPDATE [Table] SET [Position] = $i WHERE [EntityId] = $value
             DB::table('categories')->where('id', $value)->update(['sort_id' => $i]);
@@ -261,11 +264,14 @@ $option->delete();
         }
         
         //dd($tap);
-        
-        
     }
-    public function destroyCat(Request $request, $id) {
-        
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function destroyCat(Request $request, $id)
+    {
         $cat = Categories::findOrFail($id);
         
         if (isset($cat->cover)) {
@@ -276,23 +282,25 @@ $option->delete();
         
         //$request->session()->flash('alert-success', 'Категория успешно удалена!');
         //return redirect('content/cat');
-        
-        
     }
-    
-    public function indexProduct() {
-        
-        //
+
+    /**
+     * @return $this
+     */
+    public function indexProduct()
+    {
         $products = Products::orderBy('sort_id', 'asc')->get();
         
         $data = ['products' => $products, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         
         return view('admin.content.product')->with($data);
     }
-    
-    public function createProduct() {
-        
-        //
+
+    /**
+     * @return $this
+     */
+    public function createProduct()
+    {
         $cats = Categories::orderBy('sort_id', 'asc')->get();
         $prods = Products::orderBy('sort_id', 'asc')->get();
 
@@ -301,8 +309,6 @@ $option->delete();
         foreach ($options as $key => $value) {
             $opt_arr[$value->id] = $value->name;
         }
-
-
 
         $cats_arr = [];
         foreach ($cats as $key => $value) {
@@ -318,11 +324,13 @@ $option->delete();
         'opt_arr'=>$opt_arr ];
         return view('admin.content.productCreate')->with($data);
     }
-    
-    public function storeProduct(Request $request) {
-        
-        //
-        
+
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function storeProduct(Request $request)
+    {
         $cover = $request->file('cover');
         
         //dd(Input::file());
@@ -334,10 +342,8 @@ $option->delete();
         $validator = Validator::make($request->all() , ['name' => 'required|min:2|max:255', 'description' => 'required|min:2', 'urlhash' => 'required|min:2|max:255', 'cover' => 'mimes:jpeg,bmp,png', ]);
         
         if ($validator->fails()) {
-            
             return back()->withErrors($validator)->withInput();
-        } 
-        else {
+        } else {
             $coverdb = Null;
             if (isset($cover)) {
                 
@@ -383,15 +389,17 @@ $option->delete();
             $product = Products::create($arr);
             $product->recommendProds()->attach($request->related);
             $product->productOptions()->attach($request->opts);
-
-
             
             $request->session()->flash('alert-success', 'Продукт успешно создан!');
             return redirect('content/prod');
         }
     }
-    
-    public function sortProduct(Request $request) {
+
+    /**
+     * @param Request $request
+     */
+    public function sortProduct(Request $request)
+    {
         $i = 0;
         $tap = $request->item;
         foreach ($tap as $value) {
@@ -403,13 +411,14 @@ $option->delete();
         }
         
         //dd($tap);
-        
-        
     }
-    
-    public function editProduct($id) {
-        
-        //
+
+    /**
+     * @param $id
+     * @return $this
+     */
+    public function editProduct($id)
+    {
         $product = Products::findOrFail($id);
 
         $options=Options::all();
@@ -417,7 +426,6 @@ $option->delete();
         foreach ($options as $key => $value) {
             $opt_arr[$value->id] = $value->name;
         }
-
 
         $myopt = $product->productOptions;
         //dd($myopt->pivot->option_id);
@@ -428,8 +436,6 @@ $option->delete();
             array_push($myopt_arr, $value->pivot->option_id);
         }
 
-
-        
         //dd($product->recommendProd);
         
         $myprod = $product->recommendProd;
@@ -455,23 +461,27 @@ $option->delete();
         ($product->isset == 'false') ? $product->isset = Null : $product->isset;
         
         //dd($product->isset);
-        $data = ['CatList' => $cats_arr, 'Prods' => $prods_arr, 'myProds' => $myprods_arr, 'product' => $product, 'NewOrderCounter' => Purchase::Neworders()->count(),
+        $data = [
+            'CatList' => $cats_arr,
+            'Prods' => $prods_arr,
+            'myProds' => $myprods_arr,
+            'product' => $product,
+            'NewOrderCounter' => Purchase::Neworders()->count(),
+            'opt_arr'=>$opt_arr,
+            'myopt_arr'=>$myopt_arr
 
-'opt_arr'=>$opt_arr,
-'myopt_arr'=>$myopt_arr
-
-
-];
+        ];
         
         return view('admin.content.productEdit')->with($data);
     }
-    
-    public function updateProduct(Request $request, $id) {
 
-
-
-
-
+    /**
+     * @param Request $request
+     * @param $id
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function updateProduct(Request $request, $id)
+    {
         $product = Products::findOrFail($id);
         
         $cover = $request->file('cover');
@@ -487,8 +497,7 @@ $option->delete();
         if ($validator->fails()) {
             
             return back()->withErrors($validator)->withInput();
-        } 
-        else {
+        } else {
             
             if ($cover) {
                 if (isset($product->cover)) {
@@ -514,8 +523,7 @@ $option->delete();
                 $img_small->save('files/products/img/small/' . $string . '.' . $extension);
                 
                 $coverdb = $string . '.' . $extension;
-            } 
-            else {
+            } else {
                 $coverdb = $product->cover;
             }
             
@@ -548,9 +556,13 @@ $option->delete();
             return redirect('content/prod');
         }
     }
-    
-    public function destroyProduct(Request $request, $id) {
-        
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function destroyProduct(Request $request, $id)
+    {
         $prod = Products::findOrFail($id);
         
         if (isset($prod->cover)) {
@@ -562,22 +574,24 @@ $option->delete();
         
         //$request->session()->flash('alert-success', 'Категория успешно удалена!');
         //return redirect('content/cat');
-        
-        
     }
-    
-    public function indexGallery() {
-        
-        //
-        
+
+    /**
+     * @return $this
+     */
+    public function indexGallery()
+    {
         $images = Gallery::orderBy('sort_id', 'asc')->get();
         
         $data = ['images' => $images, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         return view('admin.content.gallery')->with($data);
     }
-    
-    //sortImage
-    public function sortImage(Request $request) {
+
+    /**
+     * @param Request $request
+     */
+    public function sortImage(Request $request)
+    {
         $i = 0;
         $tap = $request->item;
         foreach ($tap as $value) {
@@ -589,20 +603,19 @@ $option->delete();
         }
         
         //dd($tap);
-        
-        
     }
-    
-    //storeImage
-    public function storeImage(Request $request) {
-        
+
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function storeImage(Request $request)
+    {
         $validator = Validator::make($request->all() , ['imagefile' => 'required|mimes:jpeg,bmp,png', ]);
         
         if ($validator->fails()) {
-            
             return back()->withErrors($validator)->withInput();
-        } 
-        else {
+        } else {
             
             $imagefile = $request->file('imagefile');
             $extension = $imagefile->getClientOriginalExtension();
@@ -631,18 +644,25 @@ $option->delete();
             return redirect('content/gallery');
         }
     }
-    
-    //indexComments
-    public function indexComments() {
-        
+
+    /**
+     * @return $this
+     */
+    public function indexComments()
+    {
         $comments = Comments::orderby('created_at', 'desc')->orderby('approve')->get();
         $data = ['comments' => $comments, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         
         return view('admin.content.comments')->with($data);
     }
-    
-    //updateCommentsApprove
-    public function updateCommentsApprove(Request $request, $id) {
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function updateCommentsApprove(Request $request, $id)
+    {
         $comment = Comments::find($id);
         
         //dd($id);
@@ -650,19 +670,25 @@ $option->delete();
         $request->session()->flash('alert-success', 'Комментарий активен!');
         return redirect('content/comments');
     }
-    
-    //destroyComments
-    public function destroyComments(Request $request, $id) {
-        
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function destroyComments(Request $request, $id)
+    {
         $comment = Comments::find($id);
         $comment->delete();
         $request->session()->flash('alert-success', 'Комментарий удалён!');
         return redirect('content/comments');
     }
-    
-    public function indexInfo() {
-        
-        //
+
+    /**
+     * @return $this
+     */
+    public function indexInfo()
+    {
         $info = Info::find('1');
         $data = ['info' => $info, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         return view('admin.content.info')->with($data);
@@ -673,11 +699,9 @@ $option->delete();
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        
+    public function create()
+    {
         //
-        
-        
     }
     
     /**
@@ -687,8 +711,8 @@ $option->delete();
      * @return \Illuminate\Http\Response
      */
     
-    public function updateInfo(Request $request) {
-        
+    public function updateInfo(Request $request)
+    {
         $info = Info::find('1');
         
         $info->update(['text' => $request->text]);
@@ -696,11 +720,9 @@ $option->delete();
         return redirect('content/info');
     }
     
-    public function store(Request $request) {
-        
+    public function store(Request $request)
+    {
         //
-        
-        
     }
     
     /**
@@ -709,11 +731,9 @@ $option->delete();
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        
+    public function show($id)
+    {
         //
-        
-        
     }
     
     /**
@@ -722,11 +742,9 @@ $option->delete();
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-        
+    public function edit($id)
+    {
         //
-        
-        
     }
     
     /**
@@ -736,11 +754,9 @@ $option->delete();
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-        
+    public function update(Request $request, $id)
+    {
         //
-        
-        
     }
     
     /**
@@ -749,10 +765,8 @@ $option->delete();
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
-    public function destroyImage($id) {
-        
-        //
+    public function destroyImage($id)
+    {
         $image = Gallery::find($id);
         
         File::delete('files/gellery/' . $image->filename);
@@ -760,11 +774,12 @@ $option->delete();
         
         $image->delete();
     }
-    
-    public function destroy($id) {
-        
+
+    /**
+     * @param $id
+     */
+    public function destroy($id)
+    {
         //
-        
-        
     }
 }

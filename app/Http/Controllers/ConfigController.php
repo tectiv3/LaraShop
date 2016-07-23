@@ -23,9 +23,8 @@ class ConfigController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        
-        //
+    public function index()
+    {
         $data = ['NewOrderCounter' => Purchase::Neworders()->count() ];
         return view('admin.config')->with($data);
     }
@@ -35,10 +34,9 @@ class ConfigController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        
+    public function create()
+    {
         //
-        
     }
     
     /**
@@ -47,10 +45,9 @@ class ConfigController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        
+    public function store(Request $request)
+    {
         //
-        
     }
     
     /**
@@ -59,10 +56,9 @@ class ConfigController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        
+    public function show($id)
+    {
         //
-        
     }
     
     /**
@@ -71,10 +67,9 @@ class ConfigController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-        
+    public function edit($id)
+    {
         //
-        
     }
     
     /**
@@ -84,12 +79,10 @@ class ConfigController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request) {
-        
-        //
-        
+    public function update(Request $request)
+    {
         $validator = Validator::make($request->all() , [
-        'logo' => 'mimes:jpeg,bmp,png', 'mainprod' => 'mimes:jpeg,bmp,png', 'sitename' => 'required', 'email' => 'required|email', 'maintitle' => 'required', 'mainwords' => 'required', 'maindesc' => 'required', 'galtitle' => 'required', 'galwords' => 'required', 'galdesc' => 'required', 'infotitle' => 'required', 'infowords' => 'required', 'infodesc' => 'required', 'mainprodtitle' => 'required', 'mainproddesc' => 'required', 'mainprodlink' => 'required'
+            'logo' => 'mimes:jpeg,bmp,png', 'mainprod' => 'mimes:jpeg,bmp,png', 'sitename' => 'required', 'email' => 'required|email', 'maintitle' => 'required', 'mainwords' => 'required', 'maindesc' => 'required', 'galtitle' => 'required', 'galwords' => 'required', 'galdesc' => 'required', 'infotitle' => 'required', 'infowords' => 'required', 'infodesc' => 'required', 'mainprodtitle' => 'required', 'mainproddesc' => 'required', 'mainprodlink' => 'required'
         ]);
         
         if ($validator->fails()) {
@@ -160,9 +153,8 @@ class ConfigController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        
+    public function destroy($id)
+    {
         //
-        
     }
 }

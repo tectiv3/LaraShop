@@ -22,13 +22,13 @@ class CatalogController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function totalNavLabel() {
+    public function totalNavLabel()
+    {
         return Cart::count();
     }
     
-    public function index() {
-        
-        //
+    public function index()
+    {
         Visitor::log();
         $cats = Categories::orderBy('sort_id', 'asc')->get();
         $products = Products::orderBy('sort_id', 'asc')->get();
@@ -84,10 +84,9 @@ class CatalogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        
+    public function create()
+    {
         //
-        
     }
     
     /**
@@ -96,10 +95,9 @@ class CatalogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        
+    public function store(Request $request)
+    {
         //
-        
     }
     
     /**
@@ -108,10 +106,9 @@ class CatalogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        
+    public function show($id)
+    {
         //
-        
     }
     
     /**
@@ -120,10 +117,9 @@ class CatalogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-        
+    public function edit($id)
+    {
         //
-        
     }
     
     /**
@@ -133,10 +129,9 @@ class CatalogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-        
+    public function update(Request $request, $id)
+    {
         //
-        
     }
     
     /**
@@ -145,9 +140,8 @@ class CatalogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        
+    public function destroy($id)
+    {
         //
-        
     }
 }
